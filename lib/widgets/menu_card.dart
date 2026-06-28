@@ -25,7 +25,7 @@ class MenuCard extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(20),
         child: Container(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
             color: ShumiColors.white,
             borderRadius: BorderRadius.circular(20),
@@ -40,26 +40,39 @@ class MenuCard extends StatelessWidget {
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(icon, size: 40, color: color),
+                child: Icon(icon, size: 30, color: color),
               ),
-              const SizedBox(height: 12),
-              Text(title,
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        color: ShumiColors.textDark,
-                        fontWeight: FontWeight.bold,
-                      )),
-              const SizedBox(height: 4),
-              Text(subtitle,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: ShumiColors.textLight,
-                      )),
+              const SizedBox(height: 6),
+              Flexible(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(title,
+                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                            color: ShumiColors.textDark,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          )),
+                ),
+              ),
+              const SizedBox(height: 2),
+              Flexible(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(subtitle,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: ShumiColors.textLight,
+                            fontSize: 12,
+                          )),
+                ),
+              ),
             ],
           ),
         ),

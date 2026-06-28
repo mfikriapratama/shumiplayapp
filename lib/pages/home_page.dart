@@ -48,7 +48,7 @@ class HomePage extends StatelessWidget {
                   crossAxisCount: 3,
                   mainAxisSpacing: 12,
                   crossAxisSpacing: 12,
-                  childAspectRatio: 1.3,
+                  childAspectRatio: 1.5,
                   children: [
                     MenuCard(
                       title: '文型',
