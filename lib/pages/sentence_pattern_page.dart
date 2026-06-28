@@ -60,119 +60,134 @@ class _SentencePatternPageState extends State<SentencePatternPage> {
         foregroundColor: ShumiColors.textDark,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Character intro
-            CharacterBubble(
-              message: widget.isAdvanced
-                  ? 'では、もっと詳しく話しましょう！\n(Mari bicara lebih spesifik!)'
-                  : 'まず、動画を見てください！\n(Pertama, tonton videonya!)',
-              characterHeight: 120,
-            ),
-            const SizedBox(height: 20),
-            // Video player
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: YoutubePlayer(
-                controller: _ytController,
-                showVideoProgressIndicator: true,
-                onEnded: (_) => _onVideoEnded(),
-              ),
-            ),
-            const SizedBox(height: 24),
-            // Pattern display
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: ShumiColors.white,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: ShumiColors.primary.withValues(alpha: 0.2)),
-              ),
+      body: Row(
+        children: [
+          // Left: video + character
+          Expanded(
+            flex: 3,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Pola Tanya:',
-                      style: GoogleFonts.notoSansJp(
-                          fontSize: 14, color: ShumiColors.textLight)),
-                  const SizedBox(height: 4),
-                  Text(questionPattern,
-                      style: GoogleFonts.notoSansJp(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: ShumiColors.primary)),
-                  const SizedBox(height: 16),
-                  Text('Pola Jawab:',
-                      style: GoogleFonts.notoSansJp(
-                          fontSize: 14, color: ShumiColors.textLight)),
-                  const SizedBox(height: 4),
-                  Text(answerPattern,
-                      style: GoogleFonts.notoSansJp(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: ShumiColors.secondary)),
-                ],
-              ),
-            ),
-            const SizedBox(height: 32),
-            // Action buttons
-            if (!_showConfirm)
-              Center(
-                child: Text('Apakah sudah paham?',
-                    style: GoogleFonts.notoSansJp(
-                        fontSize: 16, color: ShumiColors.textLight)),
-              ),
-            if (_showConfirm)
-              Row(
-                children: [
+                  CharacterBubble(
+                    message: widget.isAdvanced
+                        ? 'では、もっと詳しく話しましょう！\n(Mari bicara lebih spesifik!)'
+                        : 'まず、動画を見てください！\n(Pertama, tonton videonya!)',
+                    characterHeight: 80,
+                  ),
+                  const SizedBox(height: 12),
                   Expanded(
-                    child: OutlinedButton(
-                      onPressed: () {
-                        _ytController.seekTo(Duration.zero);
-                        _ytController.play();
-                        setState(() => _showConfirm = false);
-                      },
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        side: const BorderSide(color: ShumiColors.textLight),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: YoutubePlayer(
+                        controller: _ytController,
+                        showVideoProgressIndicator: true,
+                        onEnded: (_) => _onVideoEnded(),
                       ),
-                      child: Text('Belum',
-                          style: GoogleFonts.notoSansJp(color: ShumiColors.textLight)),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => PracticePage(isAdvanced: widget.isAdvanced),
-                          ),
-                        );
-                      },
-                      child: Text('Sudah',
-                          style: GoogleFonts.notoSansJp(fontWeight: FontWeight.bold)),
                     ),
                   ),
                 ],
               ),
-            const SizedBox(height: 16),
-            // Back button
-            Center(
-              child: TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text('← ホームに戻る',
-                    style: GoogleFonts.notoSansJp(color: ShumiColors.textLight)),
+            ),
+          ),
+          // Right: pattern + buttons
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: ShumiColors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: ShumiColors.primary.withValues(alpha: 0.2)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Pola Tanya:',
+                            style: GoogleFonts.notoSansJp(
+                                fontSize: 12, color: ShumiColors.textLight)),
+                        const SizedBox(height: 4),
+                        Text(questionPattern,
+                            style: GoogleFonts.notoSansJp(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: ShumiColors.primary)),
+                        const SizedBox(height: 12),
+                        Text('Pola Jawab:',
+                            style: GoogleFonts.notoSansJp(
+                                fontSize: 12, color: ShumiColors.textLight)),
+                        const SizedBox(height: 4),
+                        Text(answerPattern,
+                            style: GoogleFonts.notoSansJp(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: ShumiColors.secondary)),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  if (!_showConfirm)
+                    Text('Apakah sudah paham?',
+                        style: GoogleFonts.notoSansJp(
+                            fontSize: 14, color: ShumiColors.textLight)),
+                  if (_showConfirm)
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () {
+                              _ytController.seekTo(Duration.zero);
+                              _ytController.play();
+                              setState(() => _showConfirm = false);
+                            },
+                            style: OutlinedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              side: const BorderSide(color: ShumiColors.textLight),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12)),
+                            ),
+                            child: Text('Belum',
+                                style: GoogleFonts.notoSansJp(
+                                    color: ShumiColors.textLight)),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => PracticePage(
+                                      isAdvanced: widget.isAdvanced),
+                                ),
+                              );
+                            },
+                            child: Text('Sudah',
+                                style: GoogleFonts.notoSansJp(
+                                    fontWeight: FontWeight.bold)),
+                          ),
+                        ),
+                      ],
+                    ),
+                  const SizedBox(height: 12),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text('← ホームに戻る',
+                        style: GoogleFonts.notoSansJp(
+                            color: ShumiColors.textLight)),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

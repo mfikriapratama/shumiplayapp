@@ -27,23 +27,50 @@ class _VocabularyPageState extends State<VocabularyPage> {
         backgroundColor: ShumiColors.background,
         foregroundColor: ShumiColors.textDark,
         elevation: 0,
+        actions: [
+          if (!showGenres)
+            TextButton.icon(
+              onPressed: () => setState(() => showGenres = true),
+              icon: const Icon(Icons.arrow_forward),
+              label: Text('次',
+                  style: GoogleFonts.notoSansJp(fontWeight: FontWeight.bold)),
+            )
+          else
+            TextButton.icon(
+              onPressed: () => setState(() => showGenres = false),
+              icon: const Icon(Icons.arrow_back),
+              label: Text('戻る',
+                  style: GoogleFonts.notoSansJp(fontWeight: FontWeight.bold)),
+            ),
+          TextButton.icon(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.home, color: ShumiColors.textLight),
+            label: Text('ホーム',
+                style: GoogleFonts.notoSansJp(color: ShumiColors.textLight)),
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
-      body: Column(
+      body: Row(
         children: [
-          // Character hint
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: CharacterBubble(
-              message: showGenres
-                  ? 'これらのジャンルが好きですか？\n(Genre ini kamu suka?)'
-                  : 'どの趣味が好きですか？\n(Hobi apa yang kamu suka?)',
-              characterHeight: 120,
+          // Left: character
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: CharacterBubble(
+                message: showGenres
+                    ? 'これらのジャンルが好きですか？\n(Genre ini kamu suka?)'
+                    : 'どの趣味が好きですか？\n(Hobi apa yang kamu suka?)',
+                characterHeight: 130,
+              ),
             ),
           ),
-          const SizedBox(height: 12),
-          // Vocabulary list
+          // Right: vocab list
           Expanded(
+            flex: 3,
             child: ListView.builder(
+              padding: const EdgeInsets.only(right: 16, top: 8, bottom: 8),
               itemCount: vocabList.length,
               itemBuilder: (context, index) {
                 final vocab = vocabList[index];
@@ -60,39 +87,6 @@ class _VocabularyPageState extends State<VocabularyPage> {
                   },
                 );
               },
-            ),
-          ),
-          // Bottom navigation
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Back to home
-                TextButton.icon(
-                  onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.home, color: ShumiColors.textLight),
-                  label: Text('ホーム',
-                      style: GoogleFonts.notoSansJp(color: ShumiColors.textLight)),
-                ),
-                // Toggle genre/hobby or go next
-                if (!showGenres)
-                  ElevatedButton.icon(
-                    onPressed: () => setState(() => showGenres = true),
-                    icon: const Icon(Icons.arrow_forward),
-                    label: Text('次',
-                        style: GoogleFonts.notoSansJp(fontWeight: FontWeight.bold)),
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: ShumiColors.secondary),
-                  )
-                else
-                  ElevatedButton.icon(
-                    onPressed: () => setState(() => showGenres = false),
-                    icon: const Icon(Icons.arrow_back),
-                    label: Text('戻る',
-                        style: GoogleFonts.notoSansJp(fontWeight: FontWeight.bold)),
-                  ),
-              ],
             ),
           ),
         ],

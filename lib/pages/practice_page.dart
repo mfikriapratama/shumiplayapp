@@ -25,7 +25,7 @@ class _PracticePageState extends State<PracticePage> {
     if (_isCorrect != null) return;
     setState(() {
       _selected = vocab;
-      _isCorrect = true; // Any selection is "correct" in this practice
+      _isCorrect = true;
     });
   }
 
@@ -67,7 +67,8 @@ class _PracticePageState extends State<PracticePage> {
                 Navigator.of(ctx).pop();
                 Navigator.of(context).popUntil((route) => route.isFirst);
               },
-              style: ElevatedButton.styleFrom(backgroundColor: ShumiColors.primary),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: ShumiColors.primary),
               child: Text('ホーム',
                   style: GoogleFonts.notoSansJp(fontWeight: FontWeight.bold)),
             ),
@@ -100,22 +101,83 @@ class _PracticePageState extends State<PracticePage> {
         foregroundColor: ShumiColors.textDark,
         elevation: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            // Character asks
-            CharacterBubble(
-              message: questions[_currentStep],
-              characterHeight: 120,
+      body: Row(
+        children: [
+          // Left: character + feedback
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CharacterBubble(
+                    message: questions[_currentStep],
+                    characterHeight: 100,
+                  ),
+                  if (_selected != null) ...[
+                    const SizedBox(height: 12),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: ShumiColors.white,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        widget.isAdvanced
+                            ? 'わたしは ${_selected!.japanese} がすきです。'
+                            : 'わたしのしゅみは ${_selected!.japanese} です。',
+                        style: GoogleFonts.notoSansJp(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: ShumiColors.primary),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () => Navigator.pop(context),
+                            style: OutlinedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              side: const BorderSide(
+                                  color: ShumiColors.textLight),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12)),
+                            ),
+                            child: Text('戻る',
+                                style: GoogleFonts.notoSansJp(
+                                    color: ShumiColors.textLight)),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: _next,
+                            child: Text('次へ',
+                                style: GoogleFonts.notoSansJp(
+                                    fontWeight: FontWeight.bold)),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ],
+              ),
             ),
-            const SizedBox(height: 20),
-            // Options grid
-            Expanded(
+          ),
+          // Right: options grid
+          Expanded(
+            flex: 3,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 2,
+                  crossAxisCount: 3,
+                  childAspectRatio: 1.8,
                   mainAxisSpacing: 10,
                   crossAxisSpacing: 10,
                 ),
@@ -134,7 +196,8 @@ class _PracticePageState extends State<PracticePage> {
                           color: isSelected
                               ? (_isCorrect == true
                                   ? ShumiColors.correct.withValues(alpha: 0.1)
-                                  : ShumiColors.incorrect.withValues(alpha: 0.1))
+                                  : ShumiColors.incorrect
+                                      .withValues(alpha: 0.1))
                               : ShumiColors.white,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
@@ -152,12 +215,13 @@ class _PracticePageState extends State<PracticePage> {
                             children: [
                               Text(vocab.japanese,
                                   style: GoogleFonts.notoSansJp(
-                                      fontSize: 16,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.bold,
                                       color: ShumiColors.primary)),
                               Text(vocab.meaning,
                                   style: GoogleFonts.notoSansJp(
-                                      fontSize: 12, color: ShumiColors.textLight)),
+                                      fontSize: 11,
+                                      color: ShumiColors.textLight)),
                             ],
                           ),
                         ),
@@ -167,55 +231,8 @@ class _PracticePageState extends State<PracticePage> {
                 },
               ),
             ),
-            // Feedback + navigation
-            if (_selected != null) ...[
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: ShumiColors.white,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  widget.isAdvanced
-                      ? 'わたしは ${_selected!.japanese} がすきです。'
-                      : 'わたしのしゅみは ${_selected!.japanese} です。',
-                  style: GoogleFonts.notoSansJp(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: ShumiColors.primary),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => Navigator.pop(context),
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        side: const BorderSide(color: ShumiColors.textLight),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                      ),
-                      child: Text('戻る',
-                          style: GoogleFonts.notoSansJp(color: ShumiColors.textLight)),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: _next,
-                      child: Text('次へ',
-                          style: GoogleFonts.notoSansJp(fontWeight: FontWeight.bold)),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

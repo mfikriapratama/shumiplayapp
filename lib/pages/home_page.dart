@@ -16,31 +16,39 @@ class HomePage extends StatelessWidget {
       backgroundColor: ShumiColors.background,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
+          padding: const EdgeInsets.all(16),
+          child: Row(
             children: [
-              // Title
-              Text(
-                'ShumiPlay!',
-                style: GoogleFonts.poppins(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: ShumiColors.primary,
+              // Left: character + bubble
+              Expanded(
+                flex: 2,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('ShumiPlay!',
+                        style: GoogleFonts.poppins(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: ShumiColors.primary)),
+                    const SizedBox(height: 12),
+                    const Expanded(
+                      child: CharacterBubble(
+                        message: '何から始めたいですか？\n(Mau mulai dari mana dulu?)',
+                        characterHeight: 130,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 16),
-              // Character bubble
-              const CharacterBubble(
-                message: '何から始めたいですか？\n(Mau mulai dari mana dulu?)',
-                characterHeight: 150,
-              ),
-              const SizedBox(height: 24),
-              // Menu grid
+              const SizedBox(width: 16),
+              // Right: menu grid
               Expanded(
+                flex: 3,
                 child: GridView.count(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 16,
-                  crossAxisSpacing: 16,
+                  crossAxisCount: 3,
+                  mainAxisSpacing: 12,
+                  crossAxisSpacing: 12,
+                  childAspectRatio: 1.3,
                   children: [
                     MenuCard(
                       title: '文型',
@@ -50,7 +58,8 @@ class HomePage extends StatelessWidget {
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => const SentencePatternPage(isAdvanced: false),
+                          builder: (_) =>
+                              const SentencePatternPage(isAdvanced: false),
                         ),
                       ),
                     ),
@@ -61,7 +70,8 @@ class HomePage extends StatelessWidget {
                       color: ShumiColors.secondary,
                       onTap: () => Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => const VocabularyPage()),
+                        MaterialPageRoute(
+                            builder: (_) => const VocabularyPage()),
                       ),
                     ),
                     MenuCard(
@@ -71,7 +81,8 @@ class HomePage extends StatelessWidget {
                       color: ShumiColors.accent,
                       onTap: () => Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => const QuizPage()),
+                        MaterialPageRoute(
+                            builder: (_) => const QuizPage()),
                       ),
                     ),
                   ],
