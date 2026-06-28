@@ -15,80 +15,79 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: ShumiColors.background,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              // Left: character + bubble
-              Expanded(
-                flex: 2,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('ShumiPlay!',
-                        style: GoogleFonts.poppins(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: ShumiColors.primary)),
-                    const SizedBox(height: 12),
-                    const Expanded(
-                      child: CharacterBubble(
-                        message: '何から始めたいですか？\n(Mau mulai dari mana dulu?)',
-                        characterHeight: 130,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 16),
-              // Right: menu grid
-              Expanded(
-                flex: 3,
-                child: GridView.count(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 12,
-                  crossAxisSpacing: 12,
-                  childAspectRatio: 1.5,
-                  children: [
-                    MenuCard(
-                      title: '文型',
-                      subtitle: 'Pola Kalimat',
-                      icon: Icons.menu_book,
-                      color: ShumiColors.primary,
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              const SentencePatternPage(isAdvanced: false),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('ShumiPlay!',
+                      style: GoogleFonts.poppins(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: ShumiColors.primary)),
+                  const SizedBox(height: 12),
+                  const CharacterBubble(
+                    message: '何から始めたいですか？\n(Mau mulai dari mana dulu?)',
+                    characterHeight: 120,
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        width: 180,
+                        height: 140,
+                        child: MenuCard(
+                          title: '文型',
+                          subtitle: 'Pola Kalimat',
+                          icon: Icons.menu_book,
+                          color: ShumiColors.primary,
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const SentencePatternPage(isAdvanced: false),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                    MenuCard(
-                      title: '言葉',
-                      subtitle: 'Kosakata',
-                      icon: Icons.translate,
-                      color: ShumiColors.secondary,
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const VocabularyPage()),
+                      const SizedBox(width: 16),
+                      SizedBox(
+                        width: 180,
+                        height: 140,
+                        child: MenuCard(
+                          title: '言葉',
+                          subtitle: 'Kosakata',
+                          icon: Icons.translate,
+                          color: ShumiColors.secondary,
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const VocabularyPage()),
+                          ),
+                        ),
                       ),
-                    ),
-                    MenuCard(
-                      title: 'クイズ',
-                      subtitle: 'Kuis',
-                      icon: Icons.quiz,
-                      color: ShumiColors.accent,
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const QuizPage()),
+                      const SizedBox(width: 16),
+                      SizedBox(
+                        width: 180,
+                        height: 140,
+                        child: MenuCard(
+                          title: 'クイズ',
+                          subtitle: 'Kuis',
+                          icon: Icons.quiz,
+                          color: ShumiColors.accent,
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const QuizPage()),
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
