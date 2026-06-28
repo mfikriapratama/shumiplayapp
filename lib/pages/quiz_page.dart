@@ -89,8 +89,9 @@ class _QuizPageState extends State<QuizPage> {
             flex: 2,
             child: Padding(
               padding: const EdgeInsets.all(16),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if (_currentIndex == 0)
                     const CharacterBubble(
@@ -182,6 +183,7 @@ class _QuizPageState extends State<QuizPage> {
                     ),
                   ],
                 ],
+                ),
               ),
             ),
           ),
