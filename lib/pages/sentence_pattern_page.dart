@@ -20,10 +20,10 @@ class _SentencePatternPageState extends State<SentencePatternPage> {
   @override
   void initState() {
     super.initState();
-    // Placeholder YouTube video - replace with actual video IDs
+    // Japanese hobby learning videos
     final videoId = widget.isAdvanced
-        ? YoutubePlayer.convertUrlToId('https://www.youtube.com/watch?v=dQw4w9WgXcQ') ?? 'dQw4w9WgXcQ'
-        : YoutubePlayer.convertUrlToId('https://www.youtube.com/watch?v=dQw4w9WgXcQ') ?? 'dQw4w9WgXcQ';
+        ? 'OmIRsRHPsS4'  // 趣味は何ですか Japanese conversation practice
+        : 'rMfxuE8hSgo'; // Japanese Vocabulary - Hobbies 趣味
     _ytController = YoutubePlayerController(
       initialVideoId: videoId,
       flags: const YoutubePlayerFlags(autoPlay: false, mute: false),
