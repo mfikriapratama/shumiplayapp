@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 import '../theme.dart';
 import '../widgets/character_bubble.dart';
 import 'practice_page.dart';
@@ -20,26 +20,23 @@ class _SentencePatternPageState extends State<SentencePatternPage> {
   @override
   void initState() {
     super.initState();
-    // Japanese hobby learning videos
     final videoId = widget.isAdvanced
         ? 'OmIRsRHPsS4'  // 趣味は何ですか Japanese conversation practice
         : 'rMfxuE8hSgo'; // Japanese Vocabulary - Hobbies 趣味
     _ytController = YoutubePlayerController(
-      initialVideoId: videoId,
-      flags: const YoutubePlayerFlags(autoPlay: false, mute: false),
+      params: const YoutubePlayerParams(
+        showControls: true,
+        showFullscreenButton: true,
+        mute: false,
+      ),
     );
+    _ytController.loadVideoById(videoId: videoId);
   }
 
   @override
   void dispose() {
-    _ytController.dispose();
+    _ytController.close();
     super.dispose();
-  }
-
-  void _onVideoEnded() {
-    setState(() {
-      _showConfirm = true;
-    });
   }
 
   @override
@@ -81,8 +78,7 @@ class _SentencePatternPageState extends State<SentencePatternPage> {
                       borderRadius: BorderRadius.circular(16),
                       child: YoutubePlayer(
                         controller: _ytController,
-                        showVideoProgressIndicator: true,
-                        onEnded: (_) => _onVideoEnded(),
+                        aspectRatio: 16 / 9,
                       ),
                     ),
                   ),
@@ -133,55 +129,81 @@ class _SentencePatternPageState extends State<SentencePatternPage> {
                   ),
                   const SizedBox(height: 24),
                   if (!_showConfirm)
-                    Text('Apakah sudah paham?',
-                        style: GoogleFonts.notoSansJp(
-                            fontSize: 14, color: ShumiColors.textLight)),
-                  if (_showConfirm)
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: () {
-                              _ytController.seekTo(Duration.zero);
-                              _ytController.play();
-                              setState(() => _showConfirm = false);
-                            },
-                            style: OutlinedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              side: const BorderSide(color: ShumiColors.textLight),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12)),
-                            ),
-                            child: Text('Belum',
-                                style: GoogleFonts.notoSansJp(
-                                    color: ShumiColors.textLight)),
+                        OutlinedButton(
+                          onPressed: () {
+                            setState(() => _showConfirm = true);
+                          },
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                            side: const BorderSide(color: ShumiColors.textLight),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12)),
                           ),
+                          child: Text('Belum',
+                              style: GoogleFonts.notoSansJp(color: ShumiColors.textLight)),
                         ),
                         const SizedBox(width: 12),
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => PracticePage(
-                                      isAdvanced: widget.isAdvanced),
-                                ),
-                              );
-                            },
-                            child: Text('Sudah',
-                                style: GoogleFonts.notoSansJp(
-                                    fontWeight: FontWeight.bold)),
-                          ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => PracticePage(isAdvanced: widget.isAdvanced),
+                              ),
+                            );
+                          },
+                          child: Text('Sudah',
+                              style: GoogleFonts.notoSansJp(fontWeight: FontWeight.bold)),
                         ),
                       ],
                     ),
+                  if (_showConfirm) ...[
+                    Text('Putar ulang video?',
+                        style: GoogleFonts.notoSansJp(
+                            fontSize: 14, color: ShumiColors.textLight)),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        OutlinedButton(
+                          onPressed: () {
+                            _ytController.seekTo(seconds: 0);
+                            _ytController.playVideo();
+                            setState(() => _showConfirm = false);
+                          },
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                            side: const BorderSide(color: ShumiColors.primary),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12)),
+                          ),
+                          child: Text('Ya, ulang',
+                              style: GoogleFonts.notoSansJp(color: ShumiColors.primary)),
+                        ),
+                        const SizedBox(width: 12),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => PracticePage(isAdvanced: widget.isAdvanced),
+                              ),
+                            );
+                          },
+                          child: Text('Lanjut',
+                              style: GoogleFonts.notoSansJp(fontWeight: FontWeight.bold)),
+                        ),
+                      ],
+                    ),
+                  ],
                   const SizedBox(height: 12),
                   TextButton(
                     onPressed: () => Navigator.pop(context),
                     child: Text('← ホームに戻る',
-                        style: GoogleFonts.notoSansJp(
-                            color: ShumiColors.textLight)),
+                        style: GoogleFonts.notoSansJp(color: ShumiColors.textLight)),
                   ),
                 ],
               ),
