@@ -1,92 +1,183 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../theme.dart';
-import '../data/vocabulary_data.dart';
-import '../widgets/vocabulary_card.dart';
-import '../widgets/character_bubble.dart';
+part of 'pages.dart';
 
-class VocabularyPage extends StatefulWidget {
-  const VocabularyPage({super.key});
-
+class VerbVocabularyPage extends StatefulWidget {
+  const VerbVocabularyPage({super.key});
   @override
-  State<VocabularyPage> createState() => _VocabularyPageState();
+  State<VerbVocabularyPage> createState() => _VerbVocabularyPageState();
 }
 
-class _VocabularyPageState extends State<VocabularyPage> {
-  bool showGenres = false;
+class _VerbVocabularyPageState extends State<VerbVocabularyPage> {
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  @override
+  void dispose() {
+    _audioPlayer.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final vocabList = showGenres ? genreVocabulary : hobbyVocabulary;
-
     return Scaffold(
+      extendBodyBehindAppBar: true,
       backgroundColor: ShumiColors.background,
       appBar: AppBar(
-        title: Text(showGenres ? 'ジャンル (Genre)' : '言葉 (Kosakata)',
-            style: GoogleFonts.notoSansJp(fontWeight: FontWeight.bold)),
-        backgroundColor: ShumiColors.background,
+        title: Text(
+          '動詞 (Kata Kerja)',
+          style: GoogleFonts.notoSansJp(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.transparent,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
         foregroundColor: ShumiColors.textDark,
         elevation: 0,
         actions: [
-          if (!showGenres)
-            TextButton.icon(
-              onPressed: () => setState(() => showGenres = true),
-              icon: const Icon(Icons.arrow_forward),
-              label: Text('次',
-                  style: GoogleFonts.notoSansJp(fontWeight: FontWeight.bold)),
-            )
-          else
-            TextButton.icon(
-              onPressed: () => setState(() => showGenres = false),
-              icon: const Icon(Icons.arrow_back),
-              label: Text('戻る',
-                  style: GoogleFonts.notoSansJp(fontWeight: FontWeight.bold)),
-            ),
           TextButton.icon(
             onPressed: () => Navigator.pop(context),
             icon: const Icon(Icons.home, color: ShumiColors.textLight),
-            label: Text('ホーム',
-                style: GoogleFonts.notoSansJp(color: ShumiColors.textLight)),
+            label: Text(
+              'ホーム',
+              style: GoogleFonts.notoSansJp(color: ShumiColors.textLight),
+            ),
           ),
           const SizedBox(width: 8),
         ],
       ),
-      body: Row(
+      body: Stack(
+        fit: StackFit.expand,
         children: [
-          // Left: character
-          Expanded(
-            flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: CharacterBubble(
-                message: showGenres
-                    ? 'これらのジャンルが好きですか？\n(Genre ini kamu suka?)'
-                    : 'どの趣味が好きですか？\n(Hobi apa yang kamu suka?)',
-                characterHeight: 130,
-              ),
+          backgroundImage,
+          SafeArea(
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: CharacterBubble(
+                      message:
+                          'どんな動詞を覚えたいですか？\n(Kata kerja apa yang ingin kamu pelajari?)',
+                      characterHeight: 130,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: ListView.builder(
+                    padding: const EdgeInsets.only(
+                      right: 16,
+                      top: 8,
+                      bottom: 8,
+                    ),
+                    itemCount: verbVocabulary.length,
+                    itemBuilder: (context, index) {
+                      final vocab = verbVocabulary[index];
+                      return VocabularyCard(
+                        vocab: vocab,
+                        onTap: () async {
+                          if (vocab.soundAsset != null) {
+                            await _audioPlayer.stop();
+                            await _audioPlayer.play(
+                              AssetSource(vocab.soundAsset!),
+                            );
+                          }
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
-          // Right: vocab list
-          Expanded(
-            flex: 3,
-            child: ListView.builder(
-              padding: const EdgeInsets.only(right: 16, top: 8, bottom: 8),
-              itemCount: vocabList.length,
-              itemBuilder: (context, index) {
-                final vocab = vocabList[index];
-                return VocabularyCard(
-                  vocab: vocab,
-                  onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('🔊 ${vocab.japanese} — ${vocab.meaning}'),
-                        backgroundColor: ShumiColors.primary,
-                        duration: const Duration(seconds: 1),
-                      ),
-                    );
-                  },
-                );
-              },
+        ],
+      ),
+    );
+  }
+}
+
+class NounVocabularyPage extends StatefulWidget {
+  const NounVocabularyPage({super.key});
+  @override
+  State<NounVocabularyPage> createState() => _NounVocabularyPageState();
+}
+
+class _NounVocabularyPageState extends State<NounVocabularyPage> {
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  @override
+  void dispose() {
+    _audioPlayer.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      backgroundColor: ShumiColors.background,
+      appBar: AppBar(
+        title: Text(
+          '名詞 (Kata Benda)',
+          style: GoogleFonts.notoSansJp(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.transparent,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
+        foregroundColor: ShumiColors.textDark,
+        elevation: 0,
+        actions: [
+          TextButton.icon(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.home, color: ShumiColors.textLight),
+            label: Text(
+              'ホーム',
+              style: GoogleFonts.notoSansJp(color: ShumiColors.textLight),
+            ),
+          ),
+          const SizedBox(width: 8),
+        ],
+      ),
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          backgroundImage,
+          SafeArea(
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: CharacterBubble(
+                      message:
+                          'どんな名詞を覚えたいですか？\n(Kata benda apa yang ingin kamu pelajari?)',
+                      characterHeight: 130,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: ListView.builder(
+                    padding: const EdgeInsets.only(
+                      right: 16,
+                      top: 8,
+                      bottom: 8,
+                    ),
+                    itemCount: nounVocabulary.length,
+                    itemBuilder: (context, index) {
+                      final vocab = nounVocabulary[index];
+                      return VocabularyCard(
+                        vocab: vocab,
+                        onTap: () async {
+                          if (vocab.soundAsset != null) {
+                            await _audioPlayer.stop();
+                            await _audioPlayer.play(
+                              AssetSource(vocab.soundAsset!),
+                            );
+                          }
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
         ],

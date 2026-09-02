@@ -5,22 +5,29 @@ class CharacterBubble extends StatelessWidget {
   final String message;
   final bool showCharacter;
   final double characterHeight;
+  final String? imagePath;
 
   const CharacterBubble({
     super.key,
     required this.message,
     this.showCharacter = true,
     this.characterHeight = 180,
+    this.imagePath,
   });
 
   @override
   Widget build(BuildContext context) {
+    final currentImagePath = imagePath ?? 'assets/images/character.png';
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         if (showCharacter)
           Image.asset(
-            'assets/images/character.png',
+            currentImagePath,
+            key: ValueKey(
+              currentImagePath,
+            ), // Memaksa Flutter render ulang gambar saat path berubah
             height: characterHeight,
             fit: BoxFit.contain,
           ),
@@ -32,7 +39,10 @@ class CharacterBubble extends StatelessWidget {
             decoration: BoxDecoration(
               color: ShumiColors.white,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: ShumiColors.primary.withValues(alpha: 0.3), width: 2),
+              border: Border.all(
+                color: ShumiColors.primary.withValues(alpha: 0.3),
+                width: 2,
+              ),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.05),
@@ -44,9 +54,9 @@ class CharacterBubble extends StatelessWidget {
             child: Text(
               message,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: ShumiColors.textDark,
-                    height: 1.5,
-                  ),
+                color: ShumiColors.textDark,
+                height: 1.5,
+              ),
             ),
           ),
         ),

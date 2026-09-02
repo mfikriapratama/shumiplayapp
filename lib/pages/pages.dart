@@ -1,0 +1,22 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:shumiplayapp/data/quiz_data.dart';
+import 'package:shumiplayapp/data/vocabulary_data.dart';
+import 'package:shumiplayapp/models/quiz_question.dart';
+import 'package:shumiplayapp/models/vocabulary.dart';
+import 'package:shumiplayapp/theme.dart';
+import 'package:shumiplayapp/widgets/character_bubble.dart';
+import 'package:shumiplayapp/widgets/component.dart';
+import 'package:shumiplayapp/widgets/menu_card.dart';
+import 'package:shumiplayapp/widgets/quiz_option.dart';
+import 'package:shumiplayapp/widgets/vocabulary_card.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+import 'package:audioplayers/audioplayers.dart';
+
+part 'home_page.dart';
+part 'splash_page.dart';
+part 'practice_page.dart';
+part 'quiz_page.dart';
+part 'score_page.dart';
+part 'sentence_pattern_page.dart';
+part 'vocabulary_page.dart';

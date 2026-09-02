@@ -1,212 +1,143 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
-import '../theme.dart';
-import '../widgets/character_bubble.dart';
-import 'practice_page.dart';
+part of 'pages.dart';
 
 class SentencePatternPage extends StatefulWidget {
-  final bool isAdvanced;
-  const SentencePatternPage({super.key, required this.isAdvanced});
+  const SentencePatternPage({super.key});
 
   @override
   State<SentencePatternPage> createState() => _SentencePatternPageState();
 }
 
 class _SentencePatternPageState extends State<SentencePatternPage> {
-  late YoutubePlayerController _ytController;
-  bool _showConfirm = false;
-
-  @override
-  void initState() {
-    super.initState();
-    final videoId = widget.isAdvanced
-        ? 'OmIRsRHPsS4'  // 趣味は何ですか Japanese conversation practice
-        : 'rMfxuE8hSgo'; // Japanese Vocabulary - Hobbies 趣味
-    _ytController = YoutubePlayerController(
-      params: const YoutubePlayerParams(
-        showControls: true,
-        showFullscreenButton: true,
-        mute: false,
-      ),
-    );
-    _ytController.loadVideoById(videoId: videoId);
-  }
-
-  @override
-  void dispose() {
-    _ytController.close();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    final title = widget.isAdvanced ? '文型 (Lanjutan)' : '文型 (Pola Kalimat)';
-    final questionPattern = widget.isAdvanced
-        ? 'どんな ＋ KB Kategori ＋ が すきですか。'
-        : 'しゅみは なんですか。';
-    final answerPattern = widget.isAdvanced
-        ? 'わたしは ＋ KB Spesifik ＋ が すきです。'
-        : 'わたしのしゅみは ＋ [KB Hobi] ＋ です。';
+    final title = '文型 (Pola Kalimat)';
+    final questionPattern = 'しゅみは なんですか。';
+    final answerPattern =
+        'しゅみ + は + [Kata Benda Hobi] + を + [Kata Kerja] + こと + です。';
 
     return Scaffold(
       backgroundColor: ShumiColors.background,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text(title, style: GoogleFonts.notoSansJp(fontWeight: FontWeight.bold)),
-        backgroundColor: ShumiColors.background,
+        title: Text(
+          title,
+          style: GoogleFonts.notoSansJp(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.transparent,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
         foregroundColor: ShumiColors.textDark,
         elevation: 0,
       ),
-      body: Row(
+      body: Stack(
+        fit: StackFit.expand,
         children: [
-          // Left: video + character
-          Expanded(
-            flex: 3,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  CharacterBubble(
-                    message: widget.isAdvanced
-                        ? 'では、もっと詳しく話しましょう！\n(Mari bicara lebih spesifik!)'
-                        : 'まず、動画を見てください！\n(Pertama, tonton videonya!)',
-                    characterHeight: 80,
-                  ),
-                  const SizedBox(height: 12),
-                  Expanded(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: YoutubePlayer(
-                        controller: _ytController,
-                        aspectRatio: 16 / 9,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          // Right: pattern + buttons
-          Expanded(
-            flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: double.infinity,
+          backgroundImage,
+          SafeArea(
+            child: Row(
+              children: [
+                // Left: character message
+                Expanded(
+                  flex: 2,
+                  child: SingleChildScrollView(
                     padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: ShumiColors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: ShumiColors.primary.withValues(alpha: 0.2)),
-                    ),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Pola Tanya:',
-                            style: GoogleFonts.notoSansJp(
-                                fontSize: 12, color: ShumiColors.textLight)),
-                        const SizedBox(height: 4),
-                        Text(questionPattern,
-                            style: GoogleFonts.notoSansJp(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: ShumiColors.primary)),
-                        const SizedBox(height: 12),
-                        Text('Pola Jawab:',
-                            style: GoogleFonts.notoSansJp(
-                                fontSize: 12, color: ShumiColors.textLight)),
-                        const SizedBox(height: 4),
-                        Text(answerPattern,
-                            style: GoogleFonts.notoSansJp(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: ShumiColors.secondary)),
+                        Center(
+                          child: CharacterBubble(
+                            message:
+                                '文型を覚えましょう！\n(Mari pelajari pola kalimatnya!)',
+                            characterHeight: 130,
+                          ),
+                        ),
+                        Text(
+                          'Pola "しゅみ + は + Kata Benda + を + Kata Kerja + こと + です" digunakan untuk menyatakan hobi secara spesifik berupa suatu kegiatan. ​Dalam bahasa Jepang, predikat sebelum です (desu) harus berupa kata benda. Karena hobi sering kali berupa kata kerja, kata kerja tersebut harus ditambah こと (koto) agar fungsinya berubah menjadi kata benda. ​Partikel は (wa) bertindak sebagai penanda topik ("Hobi saya adalah..."), sedangkan partikel を (o) menunjukkan objek dari kegiatan yang dilakukan.',
+                          style: GoogleFonts.notoSansJp(
+                            fontSize: 10,
+                            color: ShumiColors.textLight,
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 24),
-                  if (!_showConfirm)
-                    Row(
+                ),
+                // Right: pattern + buttons
+                Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        OutlinedButton(
-                          onPressed: () {
-                            setState(() => _showConfirm = true);
-                          },
-                          style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                            side: const BorderSide(color: ShumiColors.textLight),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12)),
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: ShumiColors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: ShumiColors.primary.withValues(alpha: 0.2),
+                            ),
                           ),
-                          child: Text('Belum',
-                              style: GoogleFonts.notoSansJp(color: ShumiColors.textLight)),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Pola Tanya:',
+                                style: GoogleFonts.notoSansJp(
+                                  fontSize: 12,
+                                  color: ShumiColors.textLight,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                questionPattern,
+                                style: GoogleFonts.notoSansJp(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: ShumiColors.primary,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              Text(
+                                'Pola Jawab:',
+                                style: GoogleFonts.notoSansJp(
+                                  fontSize: 12,
+                                  color: ShumiColors.textLight,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                answerPattern,
+                                style: GoogleFonts.notoSansJp(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: ShumiColors.secondary,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(height: 24),
                         ElevatedButton(
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                builder: (_) => PracticePage(isAdvanced: widget.isAdvanced),
-                              ),
+                              MaterialPageRoute(builder: (_) => PracticePage()),
                             );
                           },
-                          child: Text('Sudah',
-                              style: GoogleFonts.notoSansJp(fontWeight: FontWeight.bold)),
-                        ),
-                      ],
-                    ),
-                  if (_showConfirm) ...[
-                    Text('Putar ulang video?',
-                        style: GoogleFonts.notoSansJp(
-                            fontSize: 14, color: ShumiColors.textLight)),
-                    const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        OutlinedButton(
-                          onPressed: () {
-                            _ytController.seekTo(seconds: 0);
-                            _ytController.playVideo();
-                            setState(() => _showConfirm = false);
-                          },
-                          style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                            side: const BorderSide(color: ShumiColors.primary),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12)),
+                          child: Text(
+                            'Sudah Paham',
+                            style: GoogleFonts.notoSansJp(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                          child: Text('Ya, ulang',
-                              style: GoogleFonts.notoSansJp(color: ShumiColors.primary)),
-                        ),
-                        const SizedBox(width: 12),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => PracticePage(isAdvanced: widget.isAdvanced),
-                              ),
-                            );
-                          },
-                          child: Text('Lanjut',
-                              style: GoogleFonts.notoSansJp(fontWeight: FontWeight.bold)),
                         ),
                       ],
                     ),
-                  ],
-                  const SizedBox(height: 12),
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text('← ホームに戻る',
-                        style: GoogleFonts.notoSansJp(color: ShumiColors.textLight)),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],

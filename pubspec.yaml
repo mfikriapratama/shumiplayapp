@@ -13,13 +13,26 @@ dependencies:
   google_fonts: ^6.2.1
   youtube_player_iframe: ^4.0.4
   audioplayers: ^6.1.0
+  icons_launcher: ^3.0.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
 
+icons_launcher:
+  image_path: "assets/images/icon.png"
+  platforms:
+    android:
+      enable: true
+      image_path: "assets/images/icon.png"
+    ios:
+      enable: true
+      image_path: "assets/images/icon.png"
+
 flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/sound/
+    
